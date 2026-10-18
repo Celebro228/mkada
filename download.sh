@@ -21,6 +21,9 @@ load_func() {
 
 linux="$linux_major.$linux_minor.$linux_patch"
 
+mkdir sources
+cd sources
+
 all_load() {
     load_func linux $linux https://www.kernel.org/pub/linux/kernel/v$linux_major.x
     load_func toybox $toybox https://landley.net/toybox/downloads

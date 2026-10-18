@@ -1,0 +1,28 @@
+dash --- alt sh
+zsh
+toybox --- alt coreutlis
+d-bus
+e2fsprogs
+expect
+file
+fd --- alt find
+gettext
+glibc
+grub
+gzip
+iana-etc
+kmod
+libcap
+libffi
+libxcrypt
+linux
+openSSL
+procps-ng
+readline
+shadow
+dinit --- alt systemd
+tar
+time zone data
+util-linux
+nano
+zstd
