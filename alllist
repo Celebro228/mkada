@@ -18,7 +18,7 @@ e2fsprogs
 # elfutils
 # expat
 expect
-file
+# file
 fd --- alt find
 # gnu parallel --- alt xargs
 # plocate --- alt locate

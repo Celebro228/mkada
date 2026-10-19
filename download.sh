@@ -4,9 +4,11 @@ linux_major=7
 linux_minor=2
 linux_patch=11
 
-toybox="0.8.9"
 glibc="2.44"
 dash="0.5.13.5"
+toybox="0.8.9"
+gzip="1.15"
+tar="1.35"
 #dinit=""
 #glibc=""
 #nano=""
@@ -27,9 +29,11 @@ cd sources
 
 all_load() {
     load_func linux $linux https://www.kernel.org/pub/linux/kernel/v$linux_major.x
-    load_func toybox $toybox https://landley.net/toybox/downloads
-    load_func glibc $glibc https://mirror.us-midwest-1.nexcess.net/gnu/glibc
+    load_func glibc $glibc https://ftp.gnu.org/gnu/glibc
     load_func dash $dash http://gondor.apana.org.au/~herbert/dash/files
+    load_func toybox $toybox https://landley.net/toybox/downloads
+    load_func gzip $gzip https://ftp.gnu.org/gnu/gzip
+    load_func tar $tar https://ftp.gnu.org/gnu/tar
 }
 
 #all_load
