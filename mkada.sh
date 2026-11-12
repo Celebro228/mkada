@@ -91,21 +91,21 @@ sinit() {
     cd $sources/sinit
     make -j $(nproc) CC="musl-gcc"
     make install -j $(nproc) PREFIX=/usr DESTDIR=$ada CC="musl-gcc"
-    cd $ada/usr/bin
-    ln -s sinit init
+    cd $ada
+    ln -s usr/bin/sinit init
 
     cp $files/rc.init $ada/bin/
     chmod +x $ada/bin/rc.init
 }
 
 run() {
-    #base_dirs
+    base_dirs
     kernel
-    #dash
-    #sbase
-    #ubase
-    #musl
-    #sinit
+    dash
+    sbase
+    ubase
+    musl
+    sinit
 }
 
 run

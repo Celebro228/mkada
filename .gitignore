@@ -1,4 +1,6 @@
 iso
 sources
 ada
+boot
 initrd.img
+initramfs.cpio.gz
