@@ -36,7 +36,7 @@ links() {
     ln -s proc/self/mounts etc/mtab
     ln -s usr/bin bin
     ln -s usr/bin sbin
-    ln -s usr/lib lib
+    ln -s usr/lib lib2
     ln -s usr/lib lib64
     cd usr
     ln -s bin sbin
@@ -49,6 +49,7 @@ file_copys() {
     cp $files/passwd etc/
     cp $files/group etc/
     cp $files/nsswitch.conf etc/
+    cp $files/ld.so.conf etc/
 }
 
 file_creates() {
@@ -67,33 +68,39 @@ not_everyone() {
     chmod 600  var/log/btmp
 }
 
-
-# Права доступа
-
-# Files
-
-
-
 # Btw
-mk() {
+sc_install() {
+    cd $sources/"$1"
+    ./configure --prefix "$ada"
     make -j $(nproc)
     make install -j $(nproc)
 }
 
-sc_install() {
-    cd $sources/"$1"
-    ./configure --prefix "$ada"
-    mk
+# Build
+linux() {
+    cd $sources/linux
+    make defconfig
+    make -j $(nproc)
+    cp arch/x86/boot/bzImage $ada/boot/
 }
 
-# Build
+utillinux() {
+    cd $sources/util-linux
+    ./configure --prefix "$ada" \
+        --without-python \
+        --disable-liblastlog2
+    make -j $(nproc)
+    make install -j $(nproc)
+}
+
 glibc() {
     cd $sources/glibc
     mkdir build
     cd build
-    ../configure --prefix "$ada" --disable-nscd
-    mk
-    make localedata/install-locales
+    ../configure --prefix "$ada" --libdir=/lib #--disable-nscd
+    make -j $(nproc)
+    make install -j $(nproc)
+    #make localedata/install-locales
 }
 
 dash() {
@@ -113,18 +120,26 @@ toybox() {
     done
 }
 
+ncurses() {
+    cd $sources/ncurses
+    ./configure --prefix "$ada" \
+        --with-shared \
+        --with-termlib \
+        --enable-widec \
+        --with-versioned-syms
+    make -j $(nproc)
+    make install -j $(nproc)
+    cd $ada
+    ln -s libncursesw.so.6 lib/libncurses.so.6
+    ln -s libtinfow.so.6 lib/libtinfo.so.6
+    ldconfig -v -r ./
+}
+
 gettext() {
     cd $sources/gettext
     ./configure --disable-shared
     make
     cp gettext-tools/src/{msgfmt,msgmerge,xgettext} $ada/usr/bin
-}
-
-utillinux() {
-    cd $sources/util-linux
-    ./configure --prefix "$ada" \
-        --without-python
-    mk
 }
 
 ianaetc() {
@@ -133,20 +148,35 @@ ianaetc() {
 }
 
 all_build() {
-    glibc
+    linux
     dash
     toybox
-    sc_install gzip
-    sc_install tar
-    gettext
-    sc_install zlib
-    ianaetc
+    utillinux
+    sc_install nano
+    glibc
+    ncurses
+    #sc_install gzip
+    #sc_install tar
+    #gettext
+    #sc_install zlib
+    #ianaetc
 }
 
 deletes() {
     cd $ada
     rm -rf usr/share/{info,man,doc}/*
     find usr/{lib,libexec} -name \*.la -delete
+}
+
+run() {
+    base_dirs
+    other_dirs
+    links
+    file_copys
+    #file_creates
+    #not_everyone
+    all_build
+    deletes
 }
 
 # Delete

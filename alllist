@@ -58,7 +58,7 @@ linux
 # MPC
 # mpdecimal
 # MPFR
-# ncurses
+ncurses
 # ninja
 openSSL
 # packaging

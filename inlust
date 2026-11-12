@@ -15,6 +15,7 @@ libcap
 libffi
 libxcrypt
 linux
+ncurses
 openSSL
 procps-ng
 readline
